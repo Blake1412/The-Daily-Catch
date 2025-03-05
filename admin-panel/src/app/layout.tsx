@@ -1,17 +1,33 @@
-import "../styles/globals.css";
-import TopBar from "../components/TopBar";
+"use client";
 
-export const metadata = {
-  title: "Admin Panel",
-  description: "Manage users and reports",
-};
+import React, { useState } from 'react';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import '../styles/globals.css';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(prevState => !prevState);
+  };
+
   return (
     <html lang="en">
-      <body className="bg-gray-100">
-        <TopBar /> {/* ✅ Sidebar will be controlled inside TopBar */}
-        <main className="flex-1 min-h-screen p-6 bg-white">{children}</main>
+      {/* Add suppressHydrationWarning to ignore mismatches on the body tag */}
+      <body suppressHydrationWarning={true}>
+        <div className="min-h-screen bg-white">
+          {/* Navbar */}
+          <Navbar toggleSidebar={toggleSidebar} isOpen={sidebarOpen} />
+          
+          {/* Main Content - fixed position that stays visible */}
+          <main className="pt-16 p-6">
+            {children}
+          </main>
+          
+          {/* Sidebar - appears on top of content */}
+          <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+        </div>
       </body>
     </html>
   );

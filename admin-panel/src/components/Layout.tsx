@@ -1,75 +1,46 @@
-'use client';  // This ensures this component is only rendered on the client
+// Update the sidebar section with icons:
 
-import React, { ReactNode, useState } from 'react';
-
-interface LayoutProps {
-    children: ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle state
-
-    // Function to toggle sidebar visibility
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
-
-    return (
-        <div className="flex min-h-screen bg-white">
-            {/* Sidebar */}
-            <aside
-                className={`w-60 bg-[#0F243B] p-6 text-white transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-60'}`}
-            >
-                <ul>
-                    <li className="py-3 hover:bg-[#1E2A3D]">
-                        <a href="#" className="text-lg">Near You</a>
-                    </li>
-                    <li className="py-3 hover:bg-[#1E2A3D]">
-                        <a href="#" className="text-lg">My Profile</a>
-                    </li>
-                    <li className="py-3 hover:bg-[#1E2A3D]">
-                        <a href="#" className="text-lg">Map View</a>
-                    </li>
-                    <li className="py-3 hover:bg-[#1E2A3D]">
-                        <a href="#" className="text-lg">Saved</a>
-                    </li>
-                    <li className="py-3 hover:bg-[#1E2A3D]">
-                        <a href="#" className="text-lg">Settings</a>
-                    </li>
-                </ul>
-            </aside>
-
-            {/* Main Content */}
-            <div className="flex-1">
-                {/* Top Navbar */}
-                <header className="bg-[#0F243B] p-5 flex justify-between items-center shadow-md">
-                    <div className="text-white font-bold text-2xl">The Daily Catch</div>
-                    <button onClick={toggleSidebar} className="text-white md:hidden">
-                        {/* Hamburger menu */}
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            />
-                        </svg>
-                    </button>
-                </header>
-
-                {/* Main Content Area */}
-                <main className="p-6 text-[#1E1E1E] flex justify-center">
-                    <div className="max-w-4xl w-full">{children}</div>
-                </main>
-            </div>
-        </div>
-    );
-};
-
-export default Layout;
+<ul>
+    <li className="py-3 hover:bg-[#1E2A3D] rounded">
+        <a href="#" className="text-lg flex items-center">
+            <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Near You
+        </a>
+    </li>
+    <li className="py-3 hover:bg-[#1E2A3D] rounded">
+        <a href="#" className="text-lg flex items-center">
+            <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            My Profile
+        </a>
+    </li>
+    <li className="py-3 hover:bg-[#1E2A3D] rounded">
+        <a href="#" className="text-lg flex items-center">
+            <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4"></path>
+            </svg>
+            Map View
+        </a>
+    </li>
+    <li className="py-3 hover:bg-[#1E2A3D] rounded">
+        <a href="#" className="text-lg flex items-center">
+            <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+            </svg>
+            Saved
+        </a>
+    </li>
+    <li className="py-3 hover:bg-[#1E2A3D] bg-[#1E2A3D] rounded">
+        <a href="#" className="text-lg flex items-center">
+            <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Admin panel
+        </a>
+    </li>
+</ul>
