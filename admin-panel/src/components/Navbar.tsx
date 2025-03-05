@@ -2,11 +2,13 @@
 
 import React from "react";
 
+//Navbar component
 interface NavbarProps {
   toggleSidebar: () => void;
   isOpen: boolean;
 }
 
+//Navbar function
 export default function Navbar({ toggleSidebar, isOpen }: NavbarProps) {
   return (
     <nav className="fixed top-0 left-0 right-0 h-16 bg-[#0F243B] text-white flex items-center justify-between px-4 z-50">

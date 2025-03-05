@@ -1,8 +1,0 @@
-@import "tailwindcss";
-
-/* Custom global styles */
-body {
-  background-color: #ffffff;  /* White background for the whole page */
-  color: #333333; /* Default text color */
-  font-family: 'Arial', sans-serif; /* Default font */
-}

@@ -1,14 +1,17 @@
 "use client";
 
+// Import React and useState
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+// Sidebar component
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }
 
+// Sidebar function
 export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const pathname = usePathname();
   

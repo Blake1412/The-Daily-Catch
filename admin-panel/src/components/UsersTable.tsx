@@ -15,6 +15,7 @@ interface Report {
   date: string;
 }
 
+// Mock reports data for the example
 const mockReports: Record<number, Report[]> = {
   1: [
     { id: 1, message: "Inappropriate content", date: "2025-02-28" },
@@ -29,6 +30,8 @@ const mockReports: Record<number, Report[]> = {
   ],
 };
 
+
+// UsersTable component
 export default function UsersTable() {
   const [users, setUsers] = useState(mockUsers);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);

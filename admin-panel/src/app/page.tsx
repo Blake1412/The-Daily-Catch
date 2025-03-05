@@ -1,3 +1,4 @@
+// Page component for the Near You page.
 export default function Home() {
   return (
     <div className="pt-16 md:ml-64 p-6">
