@@ -33,7 +33,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
 
         <nav className="mt-6">
           <Link 
-            href="/" 
+            href="/nearby" 
             className={`flex items-center py-3 px-4 hover:bg-[#1E2A3D] rounded-md mb-1 ${
               pathname === "/" ? "bg-[#1E2A3D]" : ""
             }`}

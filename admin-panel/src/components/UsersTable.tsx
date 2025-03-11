@@ -1,57 +1,60 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { User } from "../models/User";
+import { Report } from "../models/Report";
+import UserController from "../controllers/UserController";
 
-// Mock data for the example
-const mockUsers = [
-  { id: 1, username: "user1", email: "user1@example.com", isBanned: false, reports: 2 },
-  { id: 2, username: "user2", email: "user2@example.com", isBanned: true, reports: 5 },
-  { id: 3, username: "user3", email: "user3@example.com", isBanned: false, reports: 0 },
-];
-
-interface Report {
-  id: number;
-  message: string;
-  date: string;
-}
-
-// Mock reports data for the example
-const mockReports: Record<number, Report[]> = {
-  1: [
-    { id: 1, message: "Inappropriate content", date: "2025-02-28" },
-    { id: 2, message: "Spam", date: "2025-03-01" },
-  ],
-  2: [
-    { id: 3, message: "Harassment", date: "2025-02-20" },
-    { id: 4, message: "Fake account", date: "2025-02-21" },
-    { id: 5, message: "Inappropriate behavior", date: "2025-02-22" },
-    { id: 6, message: "Threatening language", date: "2025-02-25" },
-    { id: 7, message: "Spam messages", date: "2025-03-01" },
-  ],
-};
-
-
-// UsersTable component
 export default function UsersTable() {
-  const [users, setUsers] = useState(mockUsers);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [showReportsModal, setShowReportsModal] = useState(false);
+  const [userReports, setUserReports] = useState<Report[]>([]);
 
-  const toggleBanStatus = (userId: number) => {
-    setUsers(
-      users.map((user) => {
-        if (user.id === userId) {
-          return { ...user, isBanned: !user.isBanned };
-        }
-        return user;
-      })
-    );
+  const userController = new UserController();
+  
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const data = await userController.getUsers();
+        setUsers(data);
+      } catch (err) {
+        setError('Failed to fetch users');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchUsers();
+  }, []);
+  
+  const toggleBanStatus = async (userId: number) => {
+    try {
+      const updatedUser = await userController.toggleBanStatus(userId);
+      setUsers(users.map(user => user.id === userId ? updatedUser : user));
+    } catch (err) {
+      setError('Failed to update user status');
+      console.error(err);
+    }
+  };
+  
+  const viewReports = async (userId: number) => {
+    try {
+      const reports = await userController.getUserReports(userId);
+      setUserReports(reports);
+      setSelectedUser(userId);
+      setShowReportsModal(true);
+    } catch (err) {
+      setError('Failed to fetch user reports');
+      console.error(err);
+    }
   };
 
-  const viewReports = (userId: number) => {
-    setSelectedUser(userId);
-    setShowReportsModal(true);
-  };
+  if (loading) return <div className="w-full text-center py-10">Loading...</div>;
+  if (error) return <div className="w-full text-center py-10 text-red-500">Error: {error}</div>;
 
   return (
     <div className="w-full">
@@ -84,14 +87,18 @@ export default function UsersTable() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button
                     onClick={() => toggleBanStatus(user.id)}
-                    className={`${user.isBanned ? 'bg-green-600' : 'bg-red-600'} text-white px-3 py-1 rounded-md mr-2`}
+                    className={`${
+                      user.isBanned 
+                        ? 'bg-green-600 hover:bg-green-700' 
+                        : 'bg-red-600 hover:bg-red-700'
+                    } text-white px-3 py-1 rounded-md mr-2 transition-colors duration-200 cursor-pointer`}
                   >
                     {user.isBanned ? "Unban" : "Ban"}
                   </button>
                   {user.reports > 0 && (
                     <button
                       onClick={() => viewReports(user.id)}
-                      className="bg-blue-600 text-white px-3 py-1 rounded-md"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md transition-colors duration-200 cursor-pointer"
                     >
                       View Reports
                     </button>
@@ -113,15 +120,15 @@ export default function UsersTable() {
               </h3>
               <button 
                 onClick={() => setShowReportsModal(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
               >
                 ✖
               </button>
             </div>
             
-            {mockReports[selectedUser]?.length > 0 ? (
+            {userReports.length > 0 ? (
               <div className="space-y-4">
-                {mockReports[selectedUser].map((report) => (
+                {userReports.map((report) => (
                   <div key={report.id} className="border border-gray-200 rounded p-4">
                     <p className="text-sm text-gray-500">Report #{report.id} • {report.date}</p>
                     <p className="mt-2">{report.message}</p>
@@ -135,7 +142,7 @@ export default function UsersTable() {
             <div className="mt-6 flex justify-end">
               <button
                 onClick={() => setShowReportsModal(false)}
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md transition-colors duration-200"
               >
                 Close
               </button>
