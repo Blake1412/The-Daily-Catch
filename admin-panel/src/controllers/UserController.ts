@@ -1,5 +1,4 @@
 import { User } from '../models/User';
-import { Report } from '../models/Report';
 import UserService from '../services/UserService';
 
 export default class UserController
@@ -18,17 +17,21 @@ export default class UserController
 
   async toggleBanStatus(userId: number): Promise<User>
   {
-    const user = await this.userService.getUserById(userId);
-    if (user)
-    {
-      user.isBanned = !user.isBanned;
-      return this.userService.updateUser(user);
-    }
-    throw new Error(`User with id ${userId} not found`);
+    return this.userService.toggleBanStatus(userId);
   }
 
-  async getUserReports(userId: number): Promise<Report[]>
+  async getUserReports(userId: number)
   {
     return this.userService.getUserReports(userId);
+  }
+
+  async updateUser(user: User): Promise<User>
+  {
+    return this.userService.updateUser(user);
+  }
+
+  async getUserById(userId: number): Promise<User>
+  {
+    return this.userService.getUserById(userId);
   }
 }

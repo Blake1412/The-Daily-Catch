@@ -1,10 +1,15 @@
+// src/app/admin/page.tsx
+"use client";
+
+import React from 'react';
 import UsersTable from '../../components/UsersTable';
 
-// Define the AdminPage component
-export default function AdminPage() {
+export default function AdminPage()
+{
   return (
-    <div className="pt-16 md:ml-64 p-6">
+    <>
+      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
       <UsersTable />
-    </div>
+    </>
   );
 }

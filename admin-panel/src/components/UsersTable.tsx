@@ -210,7 +210,15 @@ export default function UsersTable()
               <div className="space-y-4">
                 {userReports.map((report) => (
                   <div key={report.id} className="border border-gray-200 rounded p-4">
-                    <p className="text-sm text-gray-500">Report #{report.id} • {report.date}</p>
+                    <p className="text-sm text-gray-500">
+                      Report #{report.id} • {
+                        new Date(report.date).toLocaleDateString('en-GB', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric'
+                        })
+                      }
+                    </p>
                     <p className="mt-2">{report.message}</p>
                   </div>
                 ))}
@@ -245,17 +253,30 @@ export default function UsersTable()
               </button>
             </div>
 
-            <form onSubmit={(e) =>
+            // In UsersTable.tsx, replace the current form onSubmit handler:
+
+            // Replace the edit form portion in UsersTable.tsx
+            <form onSubmit={async (e) =>
             {
               e.preventDefault();
               if (editingUser)
               {
-                // Update user logic would go here
-                const updatedUsers = users.map(u =>
-                  u.id === editingUser.id ? editingUser : u
-                );
-                setUsers(updatedUsers);
-                setShowEditModal(false);
+                try
+                {
+                  // Update in Firestore via controller
+                  await userController.updateUser(editingUser);
+
+                  // Update local state
+                  setUsers(prevUsers =>
+                    prevUsers.map(u => u.id === editingUser.id ? editingUser : u)
+                  );
+
+                  setShowEditModal(false);
+                } catch (err)
+                {
+                  console.error("Error updating user:", err);
+                  alert("Failed to update user. Please try again.");
+                }
               }
             }}>
               <div className="mb-4">

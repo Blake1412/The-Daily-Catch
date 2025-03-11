@@ -1,35 +1,51 @@
+// src/components/Navbar.tsx
 "use client";
 
-import React from "react";
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'firebase/auth';
+import { auth } from '../config/firebase';
 
-//Navbar component
-interface NavbarProps
-{
+interface NavbarProps {
   toggleSidebar: () => void;
   isOpen: boolean;
 }
 
-//Navbar function
-export default function Navbar({ toggleSidebar, isOpen }: NavbarProps)
-{
+export default function Navbar({ toggleSidebar, isOpen }: NavbarProps) {
+  const router = useRouter();
+  
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/login');
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 h-16 bg-[#0F243B] text-white flex items-center justify-between px-4 z-50">
-      {/* Left side - hamburger menu */}
       <button
         onClick={toggleSidebar}
-        className="p-2 focus:outline-none cursor-pointer"
+        className="p-2 hover:bg-blue-800 rounded-md focus:outline-none cursor-pointer"
         aria-label={isOpen ? "Close menu" : "Open menu"}
       >
-        <img
-          src={isOpen ? "/img/menu.png" : "/img/sidebarclosed.png"}
-          alt={isOpen ? "Close menu" : "Open menu"}
-          width="24"
-          height="24"
-        />
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="h-6 w-6" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          {isOpen ? (
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          ) : (
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          )}
+        </svg>
       </button>
 
-      {/* Center - Title as image */}
-      <div className="absolute left-1/2 transform -translate-x-1/2">
+      <div className="absolute left-1/2 transform -translate-x-1/2 cursor-pointer">
         <img
           src="/img/title.png"
           alt="The Daily Catch"
@@ -37,16 +53,22 @@ export default function Navbar({ toggleSidebar, isOpen }: NavbarProps)
         />
       </div>
 
-      {/* Right side - profile icon */}
       <div className="flex items-center">
-        <button className="p-2 focus:outline-none cursor-pointer">
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md mr-2"
+        >
+          Logout
+        </button>
+        
+        <div className="p-2 cursor-pointer">
           <img
             src="/img/profileimg.png"
             alt="Profile"
             width="24"
             height="24"
           />
-        </button>
+        </div>
       </div>
     </nav>
   );

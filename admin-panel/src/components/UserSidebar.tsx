@@ -1,4 +1,4 @@
-// src/components/Sidebar.tsx - Ensure proper toggle functionality
+// src/components/UserSidebar.tsx - Complete user-specific sidebar component
 "use client";
 
 import React from 'react';
@@ -7,12 +7,12 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useRouter } from 'next/navigation';
 
-interface SidebarProps {
+interface UserSidebarProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
+export default function UserSidebar({ isOpen, setIsOpen }: UserSidebarProps) {
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -47,23 +47,18 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           <nav className="h-full flex flex-col">
             <ul className="space-y-2">
               <li>
-                <Link href="/admin" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
+                <Link href="/user/dashboard" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
                   <span className="ml-3">Dashboard</span>
                 </Link>
               </li>
               <li>
-                <Link href="/admin/users" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
-                  <span className="ml-3">User Management</span>
+                <Link href="/user/near-you" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
+                  <span className="ml-3">Near You</span>
                 </Link>
               </li>
               <li>
-                <Link href="/admin/create-user" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
-                  <span className="ml-3">Create User</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin/users/add-admin" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
-                  <span className="ml-3">Add Admin</span>
+                <Link href="/user/profile" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
+                  <span className="ml-3">My Profile</span>
                 </Link>
               </li>
             </ul>

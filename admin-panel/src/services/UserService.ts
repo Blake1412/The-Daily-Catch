@@ -1,13 +1,12 @@
-// src/services/UserService.ts
+// c:\dev\The-Daily-Catch\admin-panel\src\services\UserService.ts
 import { User } from '../models/User';
 import { Report } from '../models/Report';
 import { db } from '../config/firebase';
 import
-  {
-    collection, getDocs, doc, getDoc,
-    updateDoc, query, where,
-    DocumentData
-  } from 'firebase/firestore';
+{
+  collection, getDocs, doc, getDoc, setDoc, updateDoc,
+  query, where, DocumentData
+} from 'firebase/firestore';
 
 export default class UserService
 {
@@ -62,12 +61,34 @@ export default class UserService
       await updateDoc(userRef, {
         username: user.username,
         email: user.email,
-        isBanned: user.isBanned
+        isBanned: user.isBanned,
+        reports: user.reports
       });
       return user;
     } catch (error)
     {
       console.error("Error updating user:", error);
+      throw error;
+    }
+  }
+
+  // Add this method to your UserService class:
+
+  async toggleBanStatus(userId: number): Promise<User>
+  {
+    try
+    {
+      const user = await this.getUserById(userId);
+      const updatedUser = {
+        ...user,
+        isBanned: !user.isBanned
+      };
+
+      await this.updateUser(updatedUser);
+      return updatedUser;
+    } catch (error)
+    {
+      console.error("Error toggling ban status:", error);
       throw error;
     }
   }
