@@ -2,9 +2,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import ProtectedRoute from '../../components/ProtectedRoute';
-import Navbar from '../../components/Navbar';
-import Sidebar from '../../components/Sidebar';
+import ProtectedRoute from '../../components/auth/AdminProtectedRoute';
+import Navbar from '../../components/navigation/Navbar';
+import Sidebar from '../../components/navigation/AdminSidebar';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);

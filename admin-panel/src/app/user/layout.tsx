@@ -2,10 +2,10 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import UserProtectedRoute from '../../components/UserProtectedRoute';
-import Navbar from '../../components/Navbar';
-import UserSidebar from '../../components/UserSidebar';
-import Sidebar from '../../components/Sidebar'; // Import the admin sidebar
+import UserProtectedRoute from '../../components/auth/UserProtectedRoute';
+import Navbar from '../../components/navigation/Navbar';
+import UserSidebar from '../../components/navigation/UserSidebar';
+import AdminSidebar from '../../components/navigation/AdminSidebar';
 import { useRouter } from 'next/navigation';
 
 export default function UserLayout({ children }: { children: React.ReactNode }) {
@@ -29,12 +29,10 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
         <Navbar toggleSidebar={toggleSidebar} isOpen={sidebarOpen} isUserMode={!isAdmin} />
 
         <div className="flex pt-16">
-          {/* Choose sidebar based on user role */}
+          {/* Use the appropriate sidebar based on user role */}
           {isAdmin ? (
-            // Use admin sidebar for admins - same component as in admin layout
-            <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+            <AdminSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
           ) : (
-            // Use regular user sidebar for users
             <UserSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
           )}
 

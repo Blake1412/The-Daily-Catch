@@ -1,11 +1,12 @@
 // src/components/UserProtectedRoute.tsx
+// src/components/auth/UserProtectedRoute.tsx
 "use client";
 
 import { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { auth } from '../config/firebase';
+import { auth } from '../../config/firebase'; // CHANGE THIS LINE - two levels up
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../../config/firebase'; // CHANGE THIS LINE - two levels up
 
 export default function UserProtectedRoute({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);

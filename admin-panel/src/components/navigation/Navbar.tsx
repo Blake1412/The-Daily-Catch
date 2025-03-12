@@ -1,10 +1,9 @@
-// src/components/Navbar.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { auth } from '../../config/firebase'; // CHANGE THIS - two levels up, not one
 
 interface NavbarProps {
   toggleSidebar: () => void;

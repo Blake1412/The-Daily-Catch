@@ -3,60 +3,22 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { auth } from '../config/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { auth } from '../config/firebase'; // CHANGE THIS LINE - one level up, not two
 
 export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuthAndRedirect = async () => {
-      // Add a small delay to ensure auth is initialized
-      setTimeout(async () => {
-        try {
-          const user = auth.currentUser;
-          console.log("Current user:", user?.email);
-          
-          if (!user) {
-            router.push('/login');
-            return;
-          }
-          
-          // Admin email check - MAKE SURE THIS IS WORKING
-          if (user.email === 'admin@thedailycatch.com') {
-            console.log("Direct admin match found, redirecting to admin panel");
-            sessionStorage.setItem('userRole', 'admin');
-            router.push('/admin');
-            return;
-          }
-          
-          // Secondary check from Firestore
-          try {
-            const userDoc = await getDoc(doc(db, "user_roles", user.uid));
-            console.log("User role data:", userDoc.data());
-            
-            if (userDoc.exists() && userDoc.data().role === "admin") {
-              console.log("Admin role found in database");
-              sessionStorage.setItem('userRole', 'admin');
-              router.push('/admin');
-            } else {
-              console.log("Regular user, redirecting to user area");
-              sessionStorage.setItem('userRole', 'user');
-              router.push('/user/near-you');
-            }
-          } catch (error) {
-            console.error("Error checking role:", error);
-            router.push('/login?error=database');
-          }
-        } catch (error) {
-          console.error("Auth error:", error);
-          router.push('/login?error=auth');
-        }
-      }, 500);
+    // Clear any existing sessions on app start
+    const clearAndRedirect = () => {
+      // Clear session storage to prevent auto-login
+      sessionStorage.removeItem('userRole');
+      
+      // Always redirect to login page on first load
+      router.push('/login');
     };
     
-    checkAuthAndRedirect();
+    clearAndRedirect();
   }, [router]);
 
   return (

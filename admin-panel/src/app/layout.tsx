@@ -1,6 +1,7 @@
 // src/app/layout.tsx
-import '../styles/globals.css' // Fixed import path
+import './globals.css'
 import type { Metadata } from 'next'
+import VSCodeClassFixer from '../components/VSCodeClassFixer'
 
 export const metadata: Metadata = {
   title: 'The Daily Catch',
@@ -14,7 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50">{children}</body>
+      <body className="bg-gray-50">
+        <VSCodeClassFixer />
+        {children}
+      </body>
     </html>
   )
 }
