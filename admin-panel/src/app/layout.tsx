@@ -6,6 +6,11 @@ import VSCodeClassFixer from '../components/VSCodeClassFixer'
 export const metadata: Metadata = {
   title: 'The Daily Catch',
   description: 'Find your next great fishing spot',
+  icons: {
+    icon: '/img/smallLogo.png', // This will be used as the favicon
+    shortcut: '/img/smallLogo.png', // For compatibility with older browsers
+    apple: '/img/smallLogo.png', // For iOS devices
+  }
 }
 
 export default function RootLayout({

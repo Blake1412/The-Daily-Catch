@@ -16,6 +16,7 @@ node_modules/
 # Local env files
 .env*.local
 /admin-panel/.env*.local
+.env.local
 
 # Vercel
 .vercel
