@@ -1,7 +1,7 @@
 // src/components/Navbar.tsx
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
@@ -9,15 +9,28 @@ import { auth } from '../config/firebase';
 interface NavbarProps {
   toggleSidebar: () => void;
   isOpen: boolean;
+  isUserMode?: boolean;
 }
 
-export default function Navbar({ toggleSidebar, isOpen }: NavbarProps) {
+export default function Navbar({ toggleSidebar, isOpen, isUserMode = false }: NavbarProps) {
   const router = useRouter();
+  const [userRole, setUserRole] = useState<string>('');
+  
+  useEffect(() => {
+    // Get role from session storage
+    const role = sessionStorage.getItem('userRole') || '';
+    setUserRole(role);
+  }, []);
   
   const handleLogout = async () => {
     try {
+      console.log("Logging out...");
       await signOut(auth);
-      router.push('/login');
+      console.log("Logged out successfully");
+      // Clear role from session
+      sessionStorage.removeItem('userRole');
+      // Force a hard reload to clear any state
+      window.location.href = '/login';
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -54,6 +67,10 @@ export default function Navbar({ toggleSidebar, isOpen }: NavbarProps) {
       </div>
 
       <div className="flex items-center">
+        {/* Show actual role from session storage */}
+        <span className="mr-3 text-sm hidden md:inline">
+          {userRole === 'admin' ? 'Admin Mode' : 'User Mode'}
+        </span>
         <button
           onClick={handleLogout}
           className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md mr-2"

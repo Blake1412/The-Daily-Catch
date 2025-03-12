@@ -1,11 +1,8 @@
-// src/components/UserSidebar.tsx - Complete user-specific sidebar component
+// src/components/UserSidebar.tsx
 "use client";
 
 import React from 'react';
 import Link from 'next/link';
-import { signOut } from 'firebase/auth';
-import { auth } from '../config/firebase';
-import { useRouter } from 'next/navigation';
 
 interface UserSidebarProps {
   isOpen: boolean;
@@ -13,17 +10,6 @@ interface UserSidebarProps {
 }
 
 export default function UserSidebar({ isOpen, setIsOpen }: UserSidebarProps) {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      router.push('/login');
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
-
   const closeSidebar = () => {
     setIsOpen(false);
   };
@@ -47,11 +33,6 @@ export default function UserSidebar({ isOpen, setIsOpen }: UserSidebarProps) {
           <nav className="h-full flex flex-col">
             <ul className="space-y-2">
               <li>
-                <Link href="/user/dashboard" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
-                  <span className="ml-3">Dashboard</span>
-                </Link>
-              </li>
-              <li>
                 <Link href="/user/near-you" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
                   <span className="ml-3">Near You</span>
                 </Link>
@@ -61,16 +42,12 @@ export default function UserSidebar({ isOpen, setIsOpen }: UserSidebarProps) {
                   <span className="ml-3">My Profile</span>
                 </Link>
               </li>
+              <li>
+                <Link href="/user/maps" className="flex items-center p-2 rounded hover:bg-blue-700" onClick={closeSidebar}>
+                  <span className="ml-3">Maps</span>
+                </Link>
+              </li>
             </ul>
-            
-            <div className="mt-auto pb-4">
-              <button 
-                onClick={handleLogout}
-                className="flex items-center p-2 rounded hover:bg-red-700 w-full"
-              >
-                <span className="ml-3">Logout</span>
-              </button>
-            </div>
           </nav>
         </div>
       </div>

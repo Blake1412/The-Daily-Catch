@@ -12,31 +12,48 @@ export default function Home() {
 
   useEffect(() => {
     const checkAuthAndRedirect = async () => {
-      const user = auth.currentUser;
-      
-      if (!user) {
-        router.push('/login');
-        return;
-      }
-      
-      // Check if admin
-      if (user.email === 'admin@thedailycatch.com') {
-        router.push('/admin');
-        return;
-      }
-      
-      try {
-        const userDoc = await getDoc(doc(db, "user_roles", user.uid));
-        
-        if (userDoc.exists() && userDoc.data().role === "admin") {
-          router.push('/admin');
-        } else {
-          router.push('/user/dashboard');
+      // Add a small delay to ensure auth is initialized
+      setTimeout(async () => {
+        try {
+          const user = auth.currentUser;
+          console.log("Current user:", user?.email);
+          
+          if (!user) {
+            router.push('/login');
+            return;
+          }
+          
+          // Admin email check - MAKE SURE THIS IS WORKING
+          if (user.email === 'admin@thedailycatch.com') {
+            console.log("Direct admin match found, redirecting to admin panel");
+            sessionStorage.setItem('userRole', 'admin');
+            router.push('/admin');
+            return;
+          }
+          
+          // Secondary check from Firestore
+          try {
+            const userDoc = await getDoc(doc(db, "user_roles", user.uid));
+            console.log("User role data:", userDoc.data());
+            
+            if (userDoc.exists() && userDoc.data().role === "admin") {
+              console.log("Admin role found in database");
+              sessionStorage.setItem('userRole', 'admin');
+              router.push('/admin');
+            } else {
+              console.log("Regular user, redirecting to user area");
+              sessionStorage.setItem('userRole', 'user');
+              router.push('/user/near-you');
+            }
+          } catch (error) {
+            console.error("Error checking role:", error);
+            router.push('/login?error=database');
+          }
+        } catch (error) {
+          console.error("Auth error:", error);
+          router.push('/login?error=auth');
         }
-      } catch (error) {
-        console.error("Error checking role:", error);
-        router.push('/login');
-      }
+      }, 500);
     };
     
     checkAuthAndRedirect();

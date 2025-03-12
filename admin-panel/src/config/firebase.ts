@@ -1,19 +1,27 @@
-// c:\dev\The-Daily-Catch\admin-panel\src\config\firebase.ts
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+// src/config/firebase.ts
+import { initializeApp, getApps } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
-// For GitHub Pages deployment, we'll use a safer approach
-// These values can be committed to Git for this specific use case
-// Since Firebase restricts by domain, this is relatively safe
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
-  // Only include what you need
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+// Initialize Firebase properly - remove logging of sensitive info
+let app;
+
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApps()[0];
+}
+
 export const auth = getAuth(app);
+export const db = getFirestore(app);
+
+export default app;

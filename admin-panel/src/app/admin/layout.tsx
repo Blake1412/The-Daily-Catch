@@ -1,6 +1,4 @@
-// src/app/admin/layout.tsx - Add zIndex management
-// Add overflow-hidden to body when sidebar is open
-
+// src/app/admin/layout.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -10,19 +8,18 @@ import Sidebar from '../../components/Sidebar';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Add body class when sidebar is open to prevent scrolling behind overlay
   useEffect(() => {
-    if (sidebarOpen) {
-      document.body.classList.add('overflow-hidden');
-    } else {
-      document.body.classList.remove('overflow-hidden');
-    }
+    // Check if admin from session storage
+    const role = sessionStorage.getItem('userRole');
+    setIsAdmin(role === 'admin');
     
-    return () => {
-      document.body.classList.remove('overflow-hidden');
-    };
-  }, [sidebarOpen]);
+    // If not admin, this shouldn't even render, but just in case
+    if (role !== 'admin') {
+      window.location.href = '/login';
+    }
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(prevState => !prevState);
@@ -31,13 +28,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-white">
-        <Navbar toggleSidebar={toggleSidebar} isOpen={sidebarOpen} />
+        <Navbar toggleSidebar={toggleSidebar} isOpen={sidebarOpen} isUserMode={false} />
 
         <div className="flex pt-16">
-          {/* Sidebar with fixed position */}
           <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
-          {/* Main content area that shifts when sidebar opens */}
           <div
             className={`transition-all duration-300 ease-in-out flex-1 ${
               sidebarOpen ? 'ml-64' : 'ml-0'

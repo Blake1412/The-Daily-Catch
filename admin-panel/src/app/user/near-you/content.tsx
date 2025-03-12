@@ -1,4 +1,4 @@
-// src/app/user/near-you/page.tsx
+// src/app/user/near-you/content.tsx
 "use client";
 
 import React from 'react';
@@ -10,11 +10,31 @@ const fishingSpots = [
   { id: 4, name: "Sunset Beach", distance: "7.2 miles", type: "Saltwater", popularFish: ["Flounder", "Sea Bass"] },
 ];
 
-export default function NearYouPage() {
+export default function NearYouContent() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Fishing Spots Near You</h1>
+    <>
+      <h1 className="text-2xl font-bold mb-6">Welcome to The Daily Catch</h1>
       
+      <div className="bg-white shadow-md rounded p-6 mb-6">
+        <h2 className="text-xl font-bold mb-4">Today's Forecast</h2>
+        <p className="mb-4">
+          Perfect conditions for fishing! Sunny with light winds.
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div className="bg-blue-50 p-4 rounded border border-blue-100">
+            <h3 className="font-bold text-lg mb-2">Weather</h3>
+            <p>72°F, Wind 5mph SE, Humidity 65%</p>
+          </div>
+          
+          <div className="bg-green-50 p-4 rounded border border-green-100">
+            <h3 className="font-bold text-lg mb-2">Water Conditions</h3>
+            <p>Water temp: 68°F, Clarity: Good</p>
+          </div>
+        </div>
+      </div>
+      
+      <h2 className="text-xl font-bold mb-4">Fishing Spots Near You</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {fishingSpots.map(spot => (
           <div key={spot.id} className="bg-white shadow-md rounded p-6">
@@ -34,6 +54,6 @@ export default function NearYouPage() {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }
