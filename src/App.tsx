@@ -2,9 +2,32 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css'
 import ThreadPage from "./pages/ThreadPage";
 import {PostProps} from "./components/Post/Post";
+import {useEffect, useState} from "react";
 
 
 function App() {
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(`http://localhost:3000/posts/location/Limerick`);
+                setPosts(await response.json());
+            } catch (err) {
+                setError((err as Error).message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPosts();
+    });
+
+    // if (loading) return <p>Loading posts...</p>;
+    if (error) return <p>{error}</p>
 
     const postData: PostProps[] = [
         {
@@ -60,6 +83,10 @@ function App() {
             comments: [],
         }
     ]
+
+    console.log("test")
+    console.log(posts);
+    console.log("test2");
 
     return (
         <>
